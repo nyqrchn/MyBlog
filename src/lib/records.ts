@@ -1,13 +1,13 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-export type BlogPost = CollectionEntry<'blog'>;
+export type RecordPost = CollectionEntry<'records'>;
 
-export function postSlug(post: BlogPost) {
+export function postSlug(post: RecordPost) {
   return post.id.replace(/\.(md|mdx)$/, '');
 }
 
-export function postUrl(post: BlogPost) {
-  return `/blog/${postSlug(post)}/`;
+export function postUrl(post: RecordPost) {
+  return `/records/${postSlug(post)}/`;
 }
 
 export function formatDate(date: Date) {
@@ -19,7 +19,7 @@ export function formatDate(date: Date) {
 }
 
 export async function getPublishedPosts() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection('records', ({ data }) => !data.draft);
   return posts.sort(
     (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
   );

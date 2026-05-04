@@ -1,6 +1,6 @@
 # Blog
 
-Astro + React + MDX で作る、本・映画・音楽・ライブレポ・雑記用の軽量な静的サイトです。記事は `src/content/blog` に MDX で追加します。
+Astro + React + MDX で作る、本・映画・音楽・ライブレポ・雑記用の軽量な静的サイトです。記事は `src/content/records` に MDX で追加します。
 
 ## Development
 
@@ -30,7 +30,7 @@ pnpm preview
 
 ## Writing
 
-Create a new `.mdx` file in `src/content/blog`.
+Create a new `.mdx` file in `src/content/records`.
 
 ```mdx
 ---

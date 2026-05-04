@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate, getAllTags, getPublishedPosts, postUrl } from '../../lib/blog';
+import { formatDate, getAllTags, getPublishedPosts, postUrl } from '../../lib/records';
 
 export async function getStaticPaths() {
   const tags = await getAllTags();

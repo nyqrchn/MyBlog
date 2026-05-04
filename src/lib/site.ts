@@ -1,14 +1,17 @@
+export const siteId = 'kiwoku-record';
+
 export const site = {
+  id: siteId,
   name: 'キヲクレコード',
   description: '本、映画、音楽作品のレビューと感想を集める個人アーカイブです。',
   copyright: 'All rights reserved.',
   nav: [
-    { href: '/blog/', label: 'Articles' },
+    { href: '/records/', label: 'Records' },
     { href: '/tags/', label: 'Tags' },
     { href: '/about/', label: 'About' },
   ],
   storageKeys: {
-    viewMode: 'kiwoku-record:view-mode',
+    viewMode: `${siteId}:view-mode`,
   },
   labels: {
     about: 'About',

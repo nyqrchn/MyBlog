@@ -1,14 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate, getPublishedPosts, postUrl } from '../../lib/blog';
+import { formatDate, getPublishedPosts, postUrl } from '../../lib/records';
 
 const posts = await getPublishedPosts();
 ---
 
-<BaseLayout title="Articles" description="公開済みの記事一覧です。">
+<BaseLayout title="Records" description="公開済みの記録一覧です。">
   <main class="page-shell narrow">
     <section class="page-heading">
-      <p class="eyebrow">Articles</p>
+      <p class="eyebrow">Records</p>
       <h1>記事一覧</h1>
     </section>
 
