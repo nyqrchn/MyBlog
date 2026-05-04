@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, getPublishedPosts, postUrl } from '../../lib/blog';
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout title="Articles" description="公開済みの記事一覧です。">
+  <main class="page-shell narrow">
+    <section class="page-heading">
+      <p class="eyebrow">Articles</p>
+      <h1>記事一覧</h1>
+    </section>
+
+    <div class="post-list">
+      {
+        posts.map((post) => (
+          <article class="post-card">
+            <p class="meta">{formatDate(post.data.publishedAt)}</p>
+            <h2>
+              <a href={postUrl(post)}>{post.data.title}</a>
+            </h2>
+            <p>{post.data.description}</p>
+            <div class="inline-tags">
+              {post.data.tags.map((tag) => (
+                <a href={`/tags/${encodeURIComponent(tag)}/`}>{tag}</a>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import TagFilter from '../components/TagFilter';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate, getAllTags, getPublishedPosts, postUrl } from '../lib/blog';
+
+const posts = await getPublishedPosts();
+const tags = await getAllTags();
+const filterPosts = posts.map((post) => ({
+  title: post.data.title,
+  description: post.data.description,
+  url: postUrl(post),
+  date: formatDate(post.data.publishedAt),
+  tags: post.data.tags,
+}));
+---
+
+<BaseLayout title="Kohei Blog" description="技術、制作、日々の学びを軽やかに残すブログです。">
+  <main class="page-shell">
+    <section class="hero">
+      <p class="eyebrow">Astro + React + MDX</p>
+      <h1>考えたこと、作ったもの、学んだこと。</h1>
+      <p>
+        静的生成で軽く公開しながら、必要なところだけReactで動かす個人ブログです。
+      </p>
+    </section>
+
+    <TagFilter client:load posts={filterPosts} tags={tags} />
+
+    <section class="profile-strip" aria-labelledby="profile-heading">
+      <div>
+        <p class="eyebrow">About</p>
+        <h2 id="profile-heading">Kohei Watanabe</h2>
+      </div>
+      <p>
+        Web制作、開発メモ、暮らしの中で見つけた考えを整理して書いています。
+      </p>
+      <a class="text-link" href="/about/">プロフィールを見る</a>
+    </section>
+  </main>
+</BaseLayout>

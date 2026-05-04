@@ -1,0 +1,48 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, getPublishedPosts, postSlug, postUrl } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({
+    params: { slug: postSlug(post) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const posts = await getPublishedPosts();
+const index = posts.findIndex((item) => item.id === post.id);
+const previousPost = posts[index + 1];
+const nextPost = posts[index - 1];
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <main class="page-shell narrow">
+    <article class="article">
+      <header class="article-header">
+        <p class="meta">{formatDate(post.data.publishedAt)}</p>
+        <h1>{post.data.title}</h1>
+        <p>{post.data.description}</p>
+        <div class="inline-tags">
+          {
+            post.data.tags.map((tag) => (
+              <a href={`/tags/${encodeURIComponent(tag)}/`}>{tag}</a>
+            ))
+          }
+        </div>
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+
+    <nav class="post-nav" aria-label="記事ナビゲーション">
+      {previousPost && <a href={postUrl(previousPost)}>前の記事: {previousPost.data.title}</a>}
+      {nextPost && <a href={postUrl(nextPost)}>次の記事: {nextPost.data.title}</a>}
+    </nav>
+  </main>
+</BaseLayout>

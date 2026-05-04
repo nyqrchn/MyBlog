@@ -1,34 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Blog
 
-## Getting Started
+Astro + React + MDX で作る軽量な静的ブログです。記事は `src/content/blog` に MDX で追加します。
 
-First, run the development server:
+## Development
 
-```bash
-npm run dev
-# or
-yarn dev
+```sh
+export PATH="$HOME/.volta/bin:$PATH"
+volta install node@22.12.0 pnpm@10.24.0
+pnpm install
+pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+If `node -v` does not show `v22.12.0` in this project, add `export PATH="$HOME/.volta/bin:$PATH"` to your `~/.zshrc` and open a new terminal.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Build
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```sh
+pnpm build
+pnpm preview
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Cloudflare Pages
 
-## Learn More
+- Build command: `pnpm build`
+- Output directory: `dist`
+- Root directory: repository root
+- Node.js version: `22.12.0` or newer
+- Environment variable: set `SITE_URL` to the published URL for canonical URLs and sitemap generation
 
-To learn more about Next.js, take a look at the following resources:
+## Writing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a new `.mdx` file in `src/content/blog`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```mdx
+---
+title: "Post title"
+description: "Short description"
+publishedAt: 2026-05-04
+tags: ["Astro", "React"]
+draft: false
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Body content.
+```

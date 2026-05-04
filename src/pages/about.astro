@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description="このブログと書いている人について。">
+  <main class="page-shell narrow">
+    <section class="page-heading">
+      <p class="eyebrow">About</p>
+      <h1>このブログについて</h1>
+      <p>
+        技術、制作、日々の学びをあとから読み返せる形に整えていく場所です。
+      </p>
+    </section>
+
+    <div class="prose">
+      <h2>書くこと</h2>
+      <p>
+        ReactやAstroを使ったWeb制作、開発中に考えたこと、試してよかった道具や設計について書きます。
+      </p>
+
+      <h2>運用方針</h2>
+      <p>
+        記事はMDXで管理し、静的サイトとしてビルドします。軽く、読みやすく、長く保守できる構成を大切にします。
+      </p>
+    </div>
+  </main>
+</BaseLayout>
