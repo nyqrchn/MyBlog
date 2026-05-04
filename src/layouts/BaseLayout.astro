@@ -5,13 +5,15 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  showHeader?: boolean;
 }
 
-const { title, description, image = '/og-default.svg' } = Astro.props;
-const siteName = 'Kohei Blog';
+const { title, description, image = '/og-default.svg', showHeader = true } = Astro.props;
+const siteName = 'キロクレコード';
 const pageTitle = title === siteName ? title : `${title} | ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 const ogImage = new URL(image, Astro.site ?? Astro.url).toString();
+const year = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -31,17 +33,21 @@ const ogImage = new URL(image, Astro.site ?? Astro.url).toString();
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="/">Kohei Blog</a>
-      <nav aria-label="Primary navigation">
-        <a href="/blog/">Articles</a>
-        <a href="/tags/">Tags</a>
-        <a href="/about/">About</a>
-      </nav>
-    </header>
+    {
+      showHeader && (
+        <header class="site-header">
+          <a class="brand" href="/">キロクレコード</a>
+          <nav aria-label="Primary navigation">
+            <a href="/blog/">Articles</a>
+            <a href="/tags/">Tags</a>
+            <a href="/about/">About</a>
+          </nav>
+        </header>
+      )
+    }
     <slot />
     <footer class="site-footer">
-      <p>Built with Astro, React, and MDX.</p>
+      <p>© {year} キロクレコード. All rights reserved.</p>
     </footer>
   </body>
 </html>

@@ -17,6 +17,8 @@ const index = posts.findIndex((item) => item.id === post.id);
 const previousPost = posts[index + 1];
 const nextPost = posts[index - 1];
 const { Content } = await render(post);
+const rating = post.data.rating;
+const ratingPercentage = rating ? Math.max(0, Math.min(100, (rating / 5) * 100)) : 0;
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
@@ -25,7 +27,19 @@ const { Content } = await render(post);
       <header class="article-header">
         <p class="meta">{formatDate(post.data.publishedAt)}</p>
         <h1>{post.data.title}</h1>
+        <p class="creator">{post.data.creator}{post.data.workYear ? ` / ${post.data.workYear}` : ''}</p>
         <p>{post.data.description}</p>
+        {
+          rating && (
+            <p class="rating" aria-label={`評価 ${rating.toFixed(1)} / 5`}>
+              <span class="stars" style={`--rating: ${ratingPercentage}%`} aria-hidden="true">
+                <span class="stars-base">★★★★★</span>
+                <span class="stars-fill">★★★★★</span>
+              </span>
+              <span>{rating.toFixed(1)}</span>
+            </p>
+          )
+        }
         <div class="inline-tags">
           {
             post.data.tags.map((tag) => (
@@ -41,8 +55,30 @@ const { Content } = await render(post);
     </article>
 
     <nav class="post-nav" aria-label="記事ナビゲーション">
-      {previousPost && <a href={postUrl(previousPost)}>前の記事: {previousPost.data.title}</a>}
-      {nextPost && <a href={postUrl(nextPost)}>次の記事: {nextPost.data.title}</a>}
+      {
+        previousPost ? (
+          <a class="post-nav-link previous" href={postUrl(previousPost)} aria-label={`前の記事: ${previousPost.data.title}`}>
+            <span class="nav-icon" aria-hidden="true">←</span>
+            <span>
+              <small>Previous</small>
+              {previousPost.data.title}
+            </span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        nextPost && (
+          <a class="post-nav-link next" href={postUrl(nextPost)} aria-label={`次の記事: ${nextPost.data.title}`}>
+            <span>
+              <small>Next</small>
+              {nextPost.data.title}
+            </span>
+            <span class="nav-icon" aria-hidden="true">→</span>
+          </a>
+        )
+      }
     </nav>
   </main>
 </BaseLayout>

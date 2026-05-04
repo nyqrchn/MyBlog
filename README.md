@@ -1,6 +1,6 @@
 # Blog
 
-Astro + React + MDX で作る軽量な静的ブログです。記事は `src/content/blog` に MDX で追加します。
+Astro + React + MDX で作る、本・映画・音楽・ライブレポ・雑記用の軽量な静的サイトです。記事は `src/content/blog` に MDX で追加します。
 
 ## Development
 
@@ -36,10 +36,23 @@ Create a new `.mdx` file in `src/content/blog`.
 ---
 title: "Post title"
 description: "Short description"
+category: "book"
+creator: "Creator name"
+workYear: 2026
+rating: 4.2
+cover: "/covers/default.svg"
 publishedAt: 2026-05-04
 tags: ["Astro", "React"]
 draft: false
 ---
 
 Body content.
+```
+
+`category` は `book`, `movie`, `music`, `live`, `note` のいずれかを指定します。
+
+Images can be placed in `public/` and used freely in MDX.
+
+```mdx
+![Alt text](/covers/default.svg)
 ```
