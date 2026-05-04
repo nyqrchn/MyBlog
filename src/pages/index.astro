@@ -2,6 +2,7 @@
 import ReviewArchive from '../components/ReviewArchive';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { formatDate, getPublishedPosts, postUrl } from '../lib/blog';
+import { site } from '../lib/site';
 
 const posts = await getPublishedPosts();
 const reviews = posts.map((post) => ({
@@ -19,8 +20,8 @@ const reviews = posts.map((post) => ({
 ---
 
 <BaseLayout
-  title="キロクレコード"
-  description="本、映画、音楽作品のレビューと感想を集める個人アーカイブです。"
+  title={site.name}
+  description={site.description}
   showHeader={false}
 >
   <ReviewArchive client:load reviews={reviews} />

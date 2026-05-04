@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { site } from '../lib/site';
 
 interface Props {
   title: string;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const { title, description, image = '/og-default.svg', showHeader = true } = Astro.props;
-const siteName = 'キロクレコード';
+const siteName = site.name;
 const pageTitle = title === siteName ? title : `${title} | ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 const ogImage = new URL(image, Astro.site ?? Astro.url).toString();
@@ -36,18 +37,16 @@ const year = new Date().getFullYear();
     {
       showHeader && (
         <header class="site-header">
-          <a class="brand" href="/">キロクレコード</a>
+          <a class="brand" href="/">{site.name}</a>
           <nav aria-label="Primary navigation">
-            <a href="/blog/">Articles</a>
-            <a href="/tags/">Tags</a>
-            <a href="/about/">About</a>
+            {site.nav.map((item) => <a href={item.href}>{item.label}</a>)}
           </nav>
         </header>
       )
     }
     <slot />
     <footer class="site-footer">
-      <p>© {year} キロクレコード. All rights reserved.</p>
+      <p>© {year} {site.name}. {site.copyright}</p>
     </footer>
   </body>
 </html>

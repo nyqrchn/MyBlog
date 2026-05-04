@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { site } from '../lib/site';
 import { categoryLabels, type Review, type ViewMode } from '../lib/types';
 import Rating from './Rating';
 
@@ -7,7 +8,6 @@ type Props = {
 };
 
 const pageSize = 12;
-const viewModeStorageKey = 'kiroku-record:view-mode';
 
 export default function ReviewArchive({ reviews }: Props) {
   const [query, setQuery] = useState('');
@@ -36,7 +36,7 @@ export default function ReviewArchive({ reviews }: Props) {
   }, [activeCategory, query, viewMode]);
 
   useEffect(() => {
-    const savedViewMode = window.localStorage.getItem(viewModeStorageKey);
+    const savedViewMode = window.localStorage.getItem(site.storageKeys.viewMode);
     if (savedViewMode === 'grid' || savedViewMode === 'list') {
       setViewMode(savedViewMode);
     }
@@ -45,7 +45,7 @@ export default function ReviewArchive({ reviews }: Props) {
 
   useEffect(() => {
     if (!hasLoadedViewMode) return;
-    window.localStorage.setItem(viewModeStorageKey, viewMode);
+    window.localStorage.setItem(site.storageKeys.viewMode, viewMode);
   }, [hasLoadedViewMode, viewMode]);
 
   useEffect(() => {
@@ -86,16 +86,18 @@ export default function ReviewArchive({ reviews }: Props) {
     <>
       <header className="site-header archive-header">
         <h1>
-          <a href="/">キロクレコード</a>
+          <a href="/">{site.name}</a>
         </h1>
 
         <nav aria-label="Primary navigation">
-          <a href="/blog/">Articles</a>
-          <a href="/tags/">Tags</a>
-          <a href="/about/">About</a>
+          {site.nav.map((item) => (
+            <a href={item.href} key={item.href}>
+              {item.label}
+            </a>
+          ))}
         </nav>
 
-        <button className="icon-button" type="button" onClick={() => setIsSearchOpen(true)} aria-label="検索を開く">
+        <button className="icon-button" type="button" onClick={() => setIsSearchOpen(true)} aria-label={site.labels.openSearch}>
           <svg aria-hidden="true" viewBox="0 0 24 24">
             <path d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
           </svg>
@@ -104,25 +106,25 @@ export default function ReviewArchive({ reviews }: Props) {
 
       {isSearchOpen && (
         <div className="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-title">
-          <button className="modal-backdrop" type="button" aria-label="検索を閉じる" onClick={() => setIsSearchOpen(false)} />
+          <button className="modal-backdrop" type="button" aria-label={site.labels.closeSearch} onClick={() => setIsSearchOpen(false)} />
           <div className="search-dialog">
             <div className="modal-header">
-              <h2 id="search-title">Search</h2>
-              <button className="icon-button" type="button" onClick={() => setIsSearchOpen(false)} aria-label="検索を閉じる">
+              <h2 id="search-title">{site.labels.search}</h2>
+              <button className="icon-button" type="button" onClick={() => setIsSearchOpen(false)} aria-label={site.labels.closeSearch}>
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                   <path d="M18 6 6 18M6 6l12 12" />
                 </svg>
               </button>
             </div>
             <div className="search-row">
-              <label htmlFor="review-search">作品名、作者、タグ</label>
+              <label htmlFor="review-search">{site.labels.searchLabel}</label>
               <input
                 id="review-search"
                 ref={searchInputRef}
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.currentTarget.value)}
-                placeholder="検索語を入力"
+                placeholder={site.labels.searchPlaceholder}
               />
             </div>
           </div>
@@ -137,7 +139,7 @@ export default function ReviewArchive({ reviews }: Props) {
               type="button"
               onClick={() => setActiveCategory('')}
             >
-              すべて
+              {site.labels.allCategories}
             </button>
             {Object.entries(categoryLabels).map(([category, label]) => (
               <button
@@ -151,7 +153,9 @@ export default function ReviewArchive({ reviews }: Props) {
             ))}
           </div>
           <div className="list-tools">
-            <p className="result-count">{filteredReviews.length} works</p>
+            <p className="result-count">
+              {filteredReviews.length} {site.labels.workCountSuffix}
+            </p>
             <div className="view-toggle" aria-label="表示切替">
               <button
                 className={viewMode === 'grid' ? 'active' : ''}
@@ -203,19 +207,19 @@ export default function ReviewArchive({ reviews }: Props) {
             ))}
           </div>
 
-          {filteredReviews.length === 0 && <p className="empty-state">一致するレビューはありません。</p>}
+          {filteredReviews.length === 0 && <p className="empty-state">{site.labels.emptyReviews}</p>}
           {hasMore && <div className="scroll-sentinel" ref={sentinelRef} aria-hidden="true" />}
         </section>
 
         <section className="profile-card" aria-labelledby="profile-heading">
-          <div className="profile-icon" aria-hidden="true">記</div>
+          <div className="profile-icon" aria-hidden="true">{site.labels.profileIcon}</div>
           <div className="profile-copy">
-            <p className="eyebrow">About</p>
-            <h2 id="profile-heading">キロクレコード</h2>
-            <p>本、映画、音楽、ライブ、雑記を、あとから思い出せる形で残していく作品棚です。</p>
+            <p className="eyebrow">{site.labels.about}</p>
+            <h2 id="profile-heading">{site.name}</h2>
+            <p>{site.labels.profileText}</p>
           </div>
           <a className="text-link" href="/about/">
-            この棚について
+            {site.labels.profileLink}
           </a>
         </section>
       </main>
