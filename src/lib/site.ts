@@ -6,8 +6,6 @@ export const site = {
   description: '本、映画、音楽作品のレビューと感想を集める個人アーカイブです。',
   copyright: 'All rights reserved.',
   nav: [
-    { href: '/records/', label: 'Records' },
-    { href: '/tags/', label: 'Tags' },
     { href: '/about/', label: 'About' },
   ],
   storageKeys: {

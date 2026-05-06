@@ -1,4 +1,6 @@
 ---
+import SiteHeader from '../components/SiteHeader';
+import { formatDate, getPublishedPosts, postUrl } from '../lib/records';
 import '../styles/global.css';
 import { site } from '../lib/site';
 
@@ -15,6 +17,19 @@ const pageTitle = title === siteName ? title : `${title} | ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 const ogImage = new URL(image, Astro.site ?? Astro.url).toString();
 const year = new Date().getFullYear();
+const posts = showHeader ? await getPublishedPosts() : [];
+const reviews = posts.map((post) => ({
+  title: post.data.title,
+  description: post.data.description,
+  url: postUrl(post),
+  date: formatDate(post.data.publishedAt),
+  tags: post.data.tags,
+  category: post.data.category,
+  creator: post.data.creator,
+  workYear: post.data.workYear,
+  rating: post.data.rating,
+  cover: post.data.cover,
+}));
 ---
 
 <!doctype html>
@@ -34,16 +49,7 @@ const year = new Date().getFullYear();
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    {
-      showHeader && (
-        <header class="site-header">
-          <a class="brand" href="/">{site.name}</a>
-          <nav aria-label="Primary navigation">
-            {site.nav.map((item) => <a href={item.href}>{item.label}</a>)}
-          </nav>
-        </header>
-      )
-    }
+    {showHeader && <SiteHeader client:load reviews={reviews} />}
     <slot />
     <footer class="site-footer">
       <p>© {year} {site.name}. {site.copyright}</p>

@@ -22,7 +22,6 @@ const reviews = posts.map((post) => ({
 <BaseLayout
   title={site.name}
   description={site.description}
-  showHeader={false}
 >
   <ReviewArchive client:load reviews={reviews} />
 </BaseLayout>

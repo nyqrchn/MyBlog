@@ -10,30 +10,22 @@ type Props = {
 const pageSize = 12;
 
 export default function ReviewArchive({ reviews }: Props) {
-  const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [hasLoadedViewMode, setHasLoadedViewMode] = useState(false);
   const [visibleCount, setVisibleCount] = useState(pageSize);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const filteredReviews = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-
     return reviews.filter((review) => {
       const matchesCategory = activeCategory ? review.category === activeCategory : true;
-      const searchable =
-        `${review.title} ${review.description} ${review.creator} ${review.tags.join(' ')}`.toLowerCase();
-
-      return matchesCategory && searchable.includes(normalizedQuery);
+      return matchesCategory;
     });
-  }, [activeCategory, query, reviews]);
+  }, [activeCategory, reviews]);
 
   useEffect(() => {
     setVisibleCount(pageSize);
-  }, [activeCategory, query, viewMode]);
+  }, [activeCategory, viewMode]);
 
   useEffect(() => {
     const savedViewMode = window.localStorage.getItem(site.storageKeys.viewMode);
@@ -47,20 +39,6 @@ export default function ReviewArchive({ reviews }: Props) {
     if (!hasLoadedViewMode) return;
     window.localStorage.setItem(site.storageKeys.viewMode, viewMode);
   }, [hasLoadedViewMode, viewMode]);
-
-  useEffect(() => {
-    if (!isSearchOpen) return;
-    searchInputRef.current?.focus();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsSearchOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [isSearchOpen]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -84,54 +62,8 @@ export default function ReviewArchive({ reviews }: Props) {
 
   return (
     <>
-      <header className="site-header archive-header">
-        <h1>
-          <a href="/">{site.name}</a>
-        </h1>
-
-        <nav aria-label="Primary navigation">
-          {site.nav.map((item) => (
-            <a href={item.href} key={item.href}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-
-        <button className="icon-button" type="button" onClick={() => setIsSearchOpen(true)} aria-label={site.labels.openSearch}>
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
-          </svg>
-        </button>
-      </header>
-
-      {isSearchOpen && (
-        <div className="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-title">
-          <button className="modal-backdrop" type="button" aria-label={site.labels.closeSearch} onClick={() => setIsSearchOpen(false)} />
-          <div className="search-dialog">
-            <div className="modal-header">
-              <h2 id="search-title">{site.labels.search}</h2>
-              <button className="icon-button" type="button" onClick={() => setIsSearchOpen(false)} aria-label={site.labels.closeSearch}>
-                <svg aria-hidden="true" viewBox="0 0 24 24">
-                  <path d="M18 6 6 18M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="search-row">
-              <label htmlFor="review-search">{site.labels.searchLabel}</label>
-              <input
-                id="review-search"
-                ref={searchInputRef}
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.currentTarget.value)}
-                placeholder={site.labels.searchPlaceholder}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
       <main className="page-shell archive-shell">
+        <h1 className="archive-page-title">記録一覧</h1>
         <div className="archive-filter-row">
           <div className="filter-group" aria-label="作品カテゴリ">
             <button
@@ -187,6 +119,7 @@ export default function ReviewArchive({ reviews }: Props) {
               <article className="review-card" key={review.url}>
                 <a className="cover-link" href={review.url} aria-label={`${review.title}を読む`}>
                   <img src={review.cover} alt="" loading="lazy" />
+                  <span className="cover-description">{review.description}</span>
                 </a>
                 <div className="review-card-body">
                   <div className="review-meta">
@@ -200,7 +133,7 @@ export default function ReviewArchive({ reviews }: Props) {
                     {review.creator}
                     {review.workYear ? ` / ${review.workYear}` : ''}
                   </p>
-                  <p>{review.description}</p>
+                  <p className="review-description">{review.description}</p>
                   {review.rating && <Rating value={review.rating} />}
                 </div>
               </article>

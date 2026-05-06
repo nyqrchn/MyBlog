@@ -181,14 +181,20 @@ h3 {
   align-items: center;
 }
 
-.archive-header h1 {
+.site-title {
   align-self: center;
   font-size: 2rem;
+  font-weight: 800;
   white-space: nowrap;
 }
 
-.archive-header h1 a {
+.site-title a {
   text-decoration: none;
+}
+
+.archive-page-title {
+  margin-bottom: 18px;
+  font-size: 1.5rem;
 }
 
 .archive-filter-row {
@@ -232,6 +238,7 @@ h3 {
 .tag-list button,
 .filter-group button,
 .inline-tags a,
+.inline-tags span,
 .tag-index a {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -285,6 +292,7 @@ h3 {
 }
 
 .cover-link {
+  position: relative;
   display: block;
   aspect-ratio: 3 / 4;
   overflow: hidden;
@@ -304,6 +312,38 @@ h3 {
 
 .cover-link:hover img {
   transform: scale(1.035);
+}
+
+.cover-description {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 24px;
+  background: rgb(32 33 36 / 68%);
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.55;
+  text-align: center;
+  opacity: 0;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.cover-link:hover .cover-description,
+.cover-link:focus-visible .cover-description {
+  opacity: 1;
+}
+
+.review-grid .review-description {
+  display: none;
+}
+
+.review-list .cover-description {
+  display: none;
 }
 
 .review-card-body {
@@ -489,9 +529,31 @@ h3 {
   margin-top: 16px;
 }
 
-.inline-tags a {
+.inline-tags a,
+.inline-tags span {
   padding: 4px 10px;
   text-decoration: none;
+}
+
+.search-results {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.search-results a {
+  display: grid;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.search-results small,
+.search-results p {
+  margin: 0;
+  color: var(--muted);
 }
 
 .profile-card {
